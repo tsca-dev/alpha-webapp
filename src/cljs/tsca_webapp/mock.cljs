@@ -4,7 +4,7 @@
   (-> o clj->js js/JSON.stringify))
 
 ;; (def testnet (clj->str {:netident "testnet", :chain_id "NetXm8tYqnMWky1"}))
-(def testnet (clj->str {:netident "testnet", :chain_id "NetXMFJWfpUBox7"}))
+(def testnet (clj->str {:netident "testnet", :chain_id "NetXgbFy27eBoxH"}))
 
 (def sahash-frozen "MOCK_sahash_proto0_frozen_genesis")
 ;; (def tmplhash-frozen "tmpL1Q7GJiqzmwuS3SkSiWbreXWsxWrk3Y")

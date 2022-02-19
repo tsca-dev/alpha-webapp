@@ -34,6 +34,10 @@
       (.then (fn [obj]
                (def aii obj)))))
 
+(defcommand get-default-network []
+  (js/console.log "get-default-network: called")
+  (aii.RefMaster.defaultTezosNetwork))
+
 (defcommand bookhash-list []
   (aii.RefMaster.listAdvertizedBooks))
 
@@ -238,6 +242,7 @@
 (defn- process-single [command]
   (match [command]
          [{:type :all-book}] (all-book-info)
+         [{:type :default-network}] (get-default-network)
          [{:type :book-info :bookhash bookhash}] (book-info-and-provider bookhash)
          [{:type :book-status :bookhash bookhash}] (book-status bookhash)
          [{:type :provider-info :providerident providerident}] (provider-info providerident)

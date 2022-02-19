@@ -77,9 +77,9 @@
   (common/agreement-checkboxes xs indexed? ratom path switch-label))
 
 
-(defn- show-modal [modal-atom]
+(defn- show-modal [modal-atom genesis-network]
   (let [url (rt/sa-proto0 {:label "genesis"
-                           :query-params {:networks mock/testnet
+                           :query-params {:networks (js/JSON.stringify (clj->js genesis-network))
                                           :for mock/target-spec-frozen}})]
     (reset! modal-atom {:show true :url url})
     (re-frame/dispatch [::events/change-iframe-url url])))
@@ -87,8 +87,9 @@
 (defn- close-modal [modal-atom]
   (reset! modal-atom {:show false :url nil}))
 
-(defn- agreement-button [agreements modal-atom subs-key label]
-  (common/conditional-button agreements subs-key label #(show-modal modal-atom)))
+(defn- agreement-button [agreements modal-atom subs-key genesis-network label]
+  (js/console.log (str "genesis-network: " genesis-network))
+  (common/conditional-button agreements subs-key label #(show-modal modal-atom genesis-network)))
 
 (defn- info-icon [popover]
   [:div.popover.popover-bottom
@@ -141,7 +142,9 @@
          [:div.gap]
          [:div.columns
           [:div.column.col-xl-12.col-6.text-gray (str "book hash: " bookhash)]
-          [:div.column.col-xl-12.col-6.text-gray (str "template hash: " tmplhash)]]]]
+          [:div.column.col-xl-12.col-6.text-gray (str "template hash: " tmplhash)]
+          [:div.column.col-xl-12.col-6.text-gray (str "network: " (str @(re-frame/subscribe [::subs/genesis-network])))]
+          ]]]
        [:div.gap]
        [:div.card
         [:div.card-header [:h2 "Contract Details"]]
@@ -172,6 +175,7 @@
        [:div.gap]
        [:div.column
         [agreement-button agreements modal-atom ::subs/expected-agreements
+         @(re-frame/subscribe [::subs/genesis-network])
          [:div "Launch " [:i.icon.icon-upload]]]]])))
 
 (defn- assistnt-modal [modal-atom]
@@ -184,7 +188,7 @@
          [:iframe {:id "assistant-modal"}]]
         [:div.modal-footer
          [:button.btn.btn-error
-          {:on-click #(show-modal modal-atom)}
+          {:on-click #(show-modal modal-atom nil)}
           "Start over"]
          " "
          [:button.btn

@@ -8,7 +8,7 @@
  (fn-traced [{:keys [db]} _]
             {:db (-> db
                      (assoc :screen {:state :loading}))
-             :aii {:commands [{:type :all-book}]
+             :aii {:commands [{:type :all-book} {:type :default-network}]
                    :success-id ::book-list-loaded
                    :error-id   ::book-load-failed}}))
 
@@ -20,24 +20,26 @@
                                 (map (fn [t] {:type t :bookhash bookhash})))]
               {:db (-> db
                        (assoc :screen {:state :loading}))
-               :aii {:commands commands
+               :aii {:commands (cons {:type :default-network} commands)
                      :success-id ::book-info-loaded
                      :error-id   ::book-load-failed}})))
 
 (re-frame/reg-event-db
  ::book-list-loaded
- (fn-traced [db [_ [info]]]
+ (fn-traced [db [_ [info default-network]]]
             (-> db
                 (assoc :screen {:state :loaded
-                                :books info}))))
+                                :books info})
+                (assoc :default-network default-network))))
 
 (re-frame/reg-event-db
  ::book-info-loaded
- (fn-traced [db [_ [info status]]]
+ (fn-traced [db [_ [default-network info status]]]
             (-> db
                 (assoc :screen {:state :loaded
                                 :info info
-                                :status status}))))
+                                :status status})
+                (assoc :default-network default-network))))
 
 (re-frame/reg-event-db
  ::book-load-failed

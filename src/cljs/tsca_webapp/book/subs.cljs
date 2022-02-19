@@ -53,6 +53,10 @@
    (-> db :screen)))
 
 (re-frame/reg-sub
+ ::genesis-network
+ (fn [db _] (:default-network db)))
+
+(re-frame/reg-sub
  ::book-info
  :<- [::screen]
  (fn [screen _]

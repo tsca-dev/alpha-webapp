@@ -15,7 +15,7 @@
 (defn- show-modal [modal-atom]
   (let [url (build-spell-assistant-url
              "withdraw"
-             {:networks mock/testnet
+             {:networks (js/JSON.stringify js/TSCABookappInterface.network)
               :for (js/JSON.stringify (clj->js {:spellkind "spelltospirit"
                     :tmplhash mock/tmplhash-frozen
                     :sprthash (js->clj js/TSCABookappInterface.sprthash)}))})]
