@@ -1,3 +1,5 @@
+!!! This repository is deprecated in favor of https://github.com/tsca-dev/alpha-agencydev/tree/main/webish
+
 # tsca-webapp
 
 ## requirements
